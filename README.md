@@ -1,113 +1,157 @@
-# ⚡ JobEasyApply — Local-First AI Job Application Agent for LinkedIn, Greenhouse & Lever
+# ⚡ JobEasyApply — Local-First AI Job Application Agent for LinkedIn, Greenhouse, Lever & Ashby
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-v4.0.0-green.svg)](https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa)
-[![Official Website](https://img.shields.io/badge/Website-jobeasyapply.com-purple.svg)](https://jobeasyapply.com)
-[![Trustpilot](https://img.shields.io/badge/Trustpilot-4.8%20%E2%98%85-00b67a.svg)](https://jobeasyapply.com)
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa">
+    <img src="https://img.shields.io/badge/Google_Featured-5.0_%E2%98%85_Rating-22c55e.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Google Featured Extension" />
+  </a>
+  <a href="https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa">
+    <img src="https://img.shields.io/badge/Chrome_Web_Store-v4.0.7_Autopilot-blue.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store v4.0.7" />
+  </a>
+  <a href="https://jobeasyapply.com">
+    <img src="https://img.shields.io/badge/Production-Live_at_jobeasyapply.com-6366f1.svg?style=for-the-badge&logo=vercel&logoColor=white" alt="Website" />
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-gray.svg?style=for-the-badge" alt="License: MIT" />
+  </a>
+</p>
 
-**JobEasyApply** is an autonomous, browser-native automation engine that fills and submits job applications across **LinkedIn Easy Apply**, **Greenhouse Boards** (GitLab, Stripe, Datadog), and **Lever Portals** (Palantir, Spotify) using resume-grounded AI screening answers.
+<p align="center">
+  <strong>The autonomous, residential AI job application copilot.</strong><br />
+  Applies to matched roles across LinkedIn Easy Apply, Greenhouse, Lever, and Ashby on 100% hands-free autopilot — executing locally from your browser with zero account ban risk.
+</p>
 
-Unlike cloud-based apply bots that route requests through datacenter IPs (triggering bot flags and account restrictions), JobEasyApply operates as a **local Manifest v3 Chrome extension** within your authenticated browser session.
-
-🔗 **Live Platform:** [jobeasyapply.com](https://jobeasyapply.com)  
-📦 **Chrome Web Store Extension:** [Install JobEasyApply](https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa)
+<p align="center">
+  <a href="https://jobeasyapply.com">🌐 Official Website</a> •
+  <a href="https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa">📦 Install Chrome Extension</a> •
+  <a href="https://jobeasyapply.com/free-tools">🛠️ 8 Free Developer Tools</a> •
+  <a href="https://jobeasyapply.com/affiliates">💵 30% Affiliate Program</a>
+</p>
 
 ---
+
+## 💡 Why JobEasyApply?
+
+Most job application bots run on remote cloud servers (AWS, DigitalOcean, Hetzner). Hiring portals like LinkedIn, Greenhouse, and Lever easily detect these datacenter IP addresses, resulting in automated candidate shadowbans or account restrictions.
+
+**JobEasyApply is architected differently.** It is built around a **Split-Plane Architecture**:
+* **100% Residential Local Execution:** Runs directly inside your local Chrome browser (Manifest v3) using your authentic IP address, logged-in session cookies, and viewport fingerprint.
+* **1-Click Full Autopilot:** Automatically matches jobs, auto-selects the optimal resume, synthesizes recruiter screening answers in <400ms, and submits forms without freezing or manual pauses.
+* **0% Ban Risk:** Form mutations emulate human typing cadence, randomized micro-delays (120ms–340ms), and prototype event dispatchers.
+* **Zero Credential Exposure:** We never ask for, view, or store your LinkedIn or ATS passwords.
+
+---
+
+## 🏗️ System Architecture & Engineering
 
 ## 🏗️ Architecture & Engineering Design
 
-                 ┌──────────────────────────────────────────────┐
-                 │         User's Chrome Browser (Local)        │
-                 │                                              │
-                 │  ┌─────────────────┐    ┌─────────────────┐  │
-                 │  │   LinkedIn Web  │    │ Greenhouse/Lever│  │
-                 │  │   Active Tab    │    │   Active Tab    │  │
-                 │  └────────┬────────┘    └────────┬────────┘  │
-                 │           ▲                      ▲           │
-                 │           │ Synthetic Events     │           │
-                 │           │ (Pointer/Input/Blur) │           │
-                 │  ┌────────┴──────────────────────┴────────┐  │
-                 │  │   JobEasyApply Engine (ats/linkedin)   │  │
-                 │  │   • DOM / Combobox Traversal           │  │
-                 │  │   • Profile-Aware Smart Answering      │  │
-                 │  │   • Live Floating HUD & Review Mode    │  │
-                 │  └────────────────┬───────────────────────┘  │
-                 └───────────────────┼──────────────────────────┘
-                                     │
-                     HTTPS + AES-256 │ Queued Jobs & Embeddings
-                                     ▼
-                 ┌──────────────────────────────────────────────┐
-                 │         JobEasyApply Backend Server          │
-                 │                                              │
-                 │  ┌─────────────────┐    ┌─────────────────┐  │
-                 │  │ Celery Matching │    │ PostgreSQL      │  │
-                 │  │ + 40% Buffer Q  │◄───┤ + pgvector      │  │
-                 │  └─────────────────┘    └─────────────────┘  │
-                 └──────────────────────────────────────────────┘
+                         ┌──────────────────────────────────────────────────────────────┐
+             │                 User's Chrome Browser (Local)                │
+             │                                                              │
+             │   ┌────────────────────┐            ┌────────────────────┐   │
+             │   │ LinkedIn EasyApply │            │  Greenhouse/Lever  │   │
+             │   │     Active Tab     │            │     Active Tab     │   │
+             │   └─────────┬──────────┘            └─────────┬──────────┘   │
+             │             ▲                                 ▲              │
+             │             │ Synthetic Prototype Events      │              │
+             │             │ (Pointer / Input / Change)      │              │
+             │   ┌─────────┴─────────────────────────────────┴──────────┐   │
+             │   │          JobEasyApply Engine (Manifest v3)            │   │
+             │   │   • Full Autopilot Form Traversal                     │   │
+             │   │   • Smart-Resume Selector & Dropdown Matcher          │   │
+             │   │   • Web Audio Anti-Throttling Heartbeat               │   │
+             │   │   • Floating HUD with Manual Pause/Resume             │   │
+             │   └──────────────────────────┬────────────────────────────┘   │
+             └──────────────────────────────┼───────────────────────────────┘
+                                            │
+                            HTTPS + TLS 1.3 │ Queued Jobs & Embeddings
+                                            ▼
+             ┌──────────────────────────────────────────────────────────────┐
+             │             Cloud Intelligence Plane (FastAPI VPS)           │
+             │                                                              │
+             │   ┌────────────────────┐            ┌────────────────────┐   │
+             │   │ Groq LPU Inference │            │ PostgreSQL 16      │   │
+             │   │ (<400ms Screening) │            │ + asyncpg Pool     │   │
+             │   ├────────────────────┤            ├────────────────────┤   │
+             │   │ 6D Match Algorithm │            │ Redis 7 LRU Cache  │   │
+             │   │ + 40% Buffer Queue │            │ + Celery Workers   │   │
+             │   └────────────────────┘            └────────────────────┘   │
+             └──────────────────────────────────────────────────────────────┘
+
 
 ### 1. Zero-Cloud-Credential Execution (Anti-Ban)
-* **No Password or Session Sharing:** The backend never receives, stores, or proxies your LinkedIn session tokens.
-* **Authentic Fingerprinting:** Every request originates from your real residential IP, active cookies, TLS fingerprint, and screen viewport.
-* **Human-Paced Interaction:** Form filling uses randomized human delays (150ms–600ms per input) with synthetic `mousedown`, `mouseup`, `focus`, `input`, and `change` event sequences to satisfy React/Vue synthetic event listeners.
+* **No Session Hijacking:** The backend never receives or proxies your session cookies or credentials.
+* **Authentic Fingerprinting:** Every HTTP request and DOM event originates from your real residential IP, active cookies, TLS fingerprint, and screen viewport.
+* **Synthetic Event Pipeline:** Emulates native human keystrokes with randomized micro-delays (120ms–340ms) using `Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set` to satisfy React 19 and Vue controlled input state lifecycles.
 
-### 2. Solving Greenhouse & Lever Combobox Traps
-Modern ATS boards (Greenhouse, Lever, Ashby) do not use native `<select>` dropdowns. Instead, they render custom virtualized comboboxes with dynamic ARIA listboxes. JobEasyApply solves this through a multi-tier event dispatcher:
+### 2. Solving Greenhouse, Lever & Ashby Combobox Traps
+Modern ATS portals render custom virtualized comboboxes with dynamic ARIA listboxes instead of native `<select>` dropdowns. JobEasyApply solves this with a multi-tier event dispatcher:
 1. Simulates pointer interaction on the combobox trigger.
-2. Focuses and injects character inputs matching target country/residence values.
-3. Listens for rendered option items and triggers native click and change events with custom blur triggers.
+2. Injects character inputs matching target country/residence values.
+3. Listens for rendered option items and triggers native click and change events with custom blur handlers.
 
-### 3. Profile-Aware Smart Answering
-Instead of pasting brittle canned strings, the engine extracts structured candidate metadata:
-* **Dynamic Language Extraction:** Matches tech stack questions directly against your parsed resume skills (e.g. `Python, TypeScript, React, Go, SQL`).
-* **Experience Computation:** Dynamically answers numeric and boolean experience questions based on work history.
-* **Safety Memory:** Persists work authorization, visa sponsorship, and salary floor preferences once across hundreds of applications.
+### 3. Sub-400ms Neural Screening Intelligence
+Recruiters gate candidates behind complex screening questions (years of experience with specific frameworks, salary expectations, US work authorization, visa sponsorship, and situational architecture questions). JobEasyApply queries Groq LPUs and Gemini in real-time to generate contextually accurate, recruiter-grade answers tailored to your exact resume in <400ms.
 
-### 4. 40% Buffer Queue Fault Tolerance
-Job listings close unexpectedly. If a user has a daily target of 10 applications, the backend generates **14 candidate slots** ($\text{Limit} + 40\%$). If an application encounters an expired listing or strict CAPTCHA, it automatically rolls to the next queued buffer job without consuming the user's daily quota.
+### 4. 6-Dimensional Algorithmic Job Matching
+Before applying, the engine evaluates openings against six mathematical vectors:
+* **Target Title Hierarchy**
+* **Location & Remote Taxonomy**
+* **Compensation Thresholds**
+* **Technical Stack Density**
+* **Company Growth Stage**
+* **Experience Bounds**
 
 ---
 
-## ⚔️ Comparison Matrix: JobEasyApply vs. Legacy Tools
+## ⚔️ Comparison Matrix: JobEasyApply vs. Legacy Bots
 
-| Feature | 🚀 JobEasyApply | Simplify Copilot | JobRight.ai | Sonara / LazyApply |
+| Feature | 🚀 JobEasyApply | Simplify Copilot | Jobright.ai | LazyApply / LoopCV |
 | :--- | :--- | :--- | :--- | :--- |
 | **Execution Sandbox** | **Local Browser (Manifest v3)** | Local Browser | Cloud Redirect | Cloud Datacenter Bot |
-| **LinkedIn Easy Apply** | ✅ **Full Autonomous Autopilot** | ⚠️ Semi-Auto (Manual click) | ⚠️ Manual review | ❌ Risky (Account bans) |
-| **Greenhouse & Lever ATS** | ✅ **Automated Combobox + Questions** | ⚠️ Autofill only | ❌ Unsupported | ❌ Unsupported |
-| **Account Ban Risk** | 🟢 **Zero (Residential IP & Cookies)** | 🟢 Low | 🟡 Medium | 🔴 High (Datacenter flags) |
-| **Screening Intelligence**| 🧠 **Profile-Aware AI Engine** | ⚠️ Static Profile Strings | ⚠️ Basic Keyword | ❌ Static Templates |
-| **Queue Fault Tolerance** | ⚡ **40% Extra Queue Buffer** | ❌ None | ❌ None | ❌ Wasted Quotas |
-| **Free Forever Tier** | 🎁 **10 Jobs/Day (up to 15 with share)**| ⚠️ Autofill only | ⚠️ 5-10 Jobs/Day | ❌ Paid only ($49–$99/mo) |
-| **Pricing** | **$5/week or $19/month** | Freemium | $19–$49/month | $49–$99/month |
+| **LinkedIn Easy Apply** | ✅ **100% Full Autopilot** | ⚠️ Semi-Auto (Manual click) | ⚠️ Manual Review | ❌ High Ban Risk (Server IPs) |
+| **Greenhouse, Lever & Ashby** | ✅ **Automated Combobox + AI** | ⚠️ Autofill only | ❌ Unsupported | ❌ Unsupported |
+| **Account Ban Risk** | 🟢 **Zero (Residential IP)** | 🟢 Zero | 🟡 Medium | 🔴 High (Datacenter flags) |
+| **Screening Intelligence** | ⚡ **<400ms Groq LPU AI** | ⚠️ Static Strings | ⚠️ Basic Keywords | ❌ Canned Templates |
+| **Smart-Resume Routing** | ✅ **Automated 6D Matching** | ❌ Manual Selector | ❌ None | ❌ None |
+| **Queue Fault Tolerance** | ⚡ **40% Buffer Queue** | ❌ None | ❌ None | ❌ Wasted Quotas |
+| **Free Forever Tier** | 🎁 **10 AI Apps / Day (300/mo)** | ⚠️ Autofill only | ⚠️ 5-10 Apps / Day | ❌ Paid Only ($99–$149) |
 
 ---
 
-## 🛠️ Free Developer Tools Built with NVIDIA AI ($0 Cost Stack)
+## 🛠️ 8 Free AI Career Tools (Zero Cost, No Login Required)
 
-As part of the platform, we maintain 8 free utilities running on edge LLMs (no login or credit card required):
-* 🎯 [ATS Resume Score Checker](https://jobeasyapply.com/free-tools/ats-resume-checker)
-* 🔍 [Resume Keyword Gap Scanner](https://jobeasyapply.com/free-tools/resume-keyword-scanner)
-* 📝 [AI Cover Letter Generator](https://jobeasyapply.com/free-tools/cover-letter-generator)
-* 💡 [LinkedIn Headline Optimizer](https://jobeasyapply.com/free-tools/linkedin-headline-optimizer)
-* 🎯 [Interview Prep & Behavioral Generator](https://jobeasyapply.com/free-tools/interview-prep-generator)
+As part of the platform, we maintain 8 free developer utilities running on edge LLMs:
+* 🎯 [ATS Resume Score Checker](https://jobeasyapply.com/free-tools/ats-resume-checker) — Instant ATS compatibility scoring and parsing check.
+* 🔍 [Resume Keyword Gap Scanner](https://jobeasyapply.com/free-tools/resume-keyword-scanner) — Identifies missing keywords from job postings.
+* 📝 [AI Cover Letter Generator](https://jobeasyapply.com/free-tools/cover-letter-generator) — Role-specific, tailored cover letters in seconds.
+* 💡 [LinkedIn Headline Optimizer](https://jobeasyapply.com/free-tools/linkedin-headline-optimizer) — High-converting recruiter-magnet headlines.
+* 🎯 [Interview Prep & Behavioral Generator](https://jobeasyapply.com/free-tools/interview-prep-generator) — Custom behavioral and technical interview questions.
+* ⚡ [Resume Bullet Optimizer](https://jobeasyapply.com/free-tools/resume-bullet-optimizer) — Rewrites bullet points into quantified impact metrics.
+* 📄 [Resume Summary Generator](https://jobeasyapply.com/free-tools/resume-summary-generator) — Executive, punchy career summaries.
+* ✂️ [Targeted Resume Tailor](https://jobeasyapply.com/free-tools/resume-tailor) — Re-aligns your resume to any specific job description.
 
 ---
 
-## 🚀 Quickstart (30 Seconds)
+## 🚀 Quickstart Guide (3 Minutes)
 
-1. Sign up at [jobeasyapply.com](https://jobeasyapply.com) (Free Forever, no credit card required).
+1. Create your account at [jobeasyapply.com](https://jobeasyapply.com) (Free Forever, zero credit card required).
 2. Install the [JobEasyApply Chrome Extension](https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa).
-3. Upload your resume (PDF) to parse your skills and experience.
-4. Set your job titles, target platforms (**LinkedIn, Greenhouse, Lever**), and click **"Start Agent"**.
+3. Upload your resume (PDF) to extract your experience, skills, and background.
+4. Set your job titles, target locations (Remote/Hybrid/On-site), and salary expectations.
+5. Open LinkedIn Jobs or any Greenhouse/Lever/Ashby board and click **"Start Auto Apply"**.
+6. Track submissions in real time from your centralized telemetry dashboard at [jobeasyapply.com/dashboard](https://jobeasyapply.com/dashboard).
 
 ---
 
-## 🛡️ Privacy, Security & Disclaimers
+## 🛡️ Security, Privacy & Enterprise Compliance
 
-* **Zero Password Storage:** JobEasyApply never requests or stores your passwords.
-* **Encrypted Profile Store:** User preferences and resume tokens are encrypted with AES-256.
-* **Disclaimer:** JobEasyApply is an independent developer project and is not affiliated with, endorsed by, or sponsored by LinkedIn, Greenhouse Software, or Lever.co.
+* **Zero Password Storage:** JobEasyApply never requests, intercepts, or stores your passwords.
+* **Encryption Standards:** All profile data and communication are encrypted with TLS 1.3 in transit and AES-256 at rest.
+* **Strict Privacy Policy:** We never sell, broker, or monetize candidate data.
+* **Data Sovereignty:** Full GDPR and CCPA compliance with 1-click permanent account deletion.
+* **Disclaimer:** JobEasyApply is an independent open-source project and is not affiliated with, endorsed by, or sponsored by LinkedIn, Greenhouse Software, Lever, or Ashby.
 
 ---
 
-⭐ If this project saved you hours of form-filling, please star the repository on GitHub!
+⭐ **Star this repository** if JobEasyApply saved you hundreds of hours of repetitive job applications!

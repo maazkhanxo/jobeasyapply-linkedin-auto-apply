@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa">
-    <img src="https://img.shields.io/badge/Google_Featured-5.0_%E2%98%85_Rating-22c55e.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Google Featured Extension" />
+    <img src="https://img.shields.io/badge/Google_Featured-4.9_%E2%98%85_Rating-22c55e.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Google Featured Extension" />
   </a>
   <a href="https://chromewebstore.google.com/detail/jobeasyapply-%E2%80%94-ai-job-app/aegajdjmemfodffcjbcbefkppjobeeoa">
     <img src="https://img.shields.io/badge/Chrome_Web_Store-v4.0.7_Autopilot-blue.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store v4.0.7" />
@@ -43,7 +43,6 @@ Most job application bots run on remote cloud servers (AWS, DigitalOcean, Hetzne
 
 ## 🏗️ System Architecture & Engineering
 
-## 🏗️ Architecture & Engineering Design
 
                          ┌──────────────────────────────────────────────────────────────┐
              │                 User's Chrome Browser (Local)                │

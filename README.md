@@ -44,24 +44,24 @@ Most job application bots run on remote cloud servers (AWS, DigitalOcean, Hetzne
 ## 🏗️ System Architecture & Engineering
 
 
-                         ┌──────────────────────────────────────────────────────────────┐
-             │                 User's Chrome Browser (Local)                │
-             │                                                              │
-             │   ┌────────────────────┐            ┌────────────────────┐   │
-             │   │ LinkedIn EasyApply │            │  Greenhouse/Lever  │   │
-             │   │     Active Tab     │            │     Active Tab     │   │
-             │   └─────────┬──────────┘            └─────────┬──────────┘   │
-             │             ▲                                 ▲              │
-             │             │ Synthetic Prototype Events      │              │
-             │             │ (Pointer / Input / Change)      │              │
-             │   ┌─────────┴─────────────────────────────────┴──────────┐   │
+             ┌───────────────────────────────────────────────────────────────┐
+             │                 User's Chrome Browser (Local)                 │
+             │                                                               │
+             │   ┌────────────────────┐            ┌────────────────────┐    │
+             │   │ LinkedIn EasyApply │            │  Greenhouse/Lever  │    │
+             │   │     Active Tab     │            │     Active Tab     │    │
+             │   └─────────┬──────────┘            └─────────┬──────────┘    │
+             │             ▲                                 ▲               │
+             │             │ Synthetic Prototype Events      │               │
+             │             │ (Pointer / Input / Change)      │               │
+             │   ┌─────────┴─────────────────────────────────┴──────────┐    │
              │   │          JobEasyApply Engine (Manifest v3)            │   │
              │   │   • Full Autopilot Form Traversal                     │   │
              │   │   • Smart-Resume Selector & Dropdown Matcher          │   │
              │   │   • Web Audio Anti-Throttling Heartbeat               │   │
              │   │   • Floating HUD with Manual Pause/Resume             │   │
              │   └──────────────────────────┬────────────────────────────┘   │
-             └──────────────────────────────┼───────────────────────────────┘
+             └──────────────────────────────┼────────────────────────────────┘
                                             │
                             HTTPS + TLS 1.3 │ Queued Jobs & Embeddings
                                             ▼
